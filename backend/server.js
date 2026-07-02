@@ -1,17 +1,20 @@
-const app = require('./src/app');
-const express = require('exress')
-const dotnev = require('dotenv')
-const cors = require('cors')
+require("dotenv").config();
 
+const app = require("./src/app");
+const connectDB = require("./src/config/db");
+const authRouter = require("./src/routers/auth.router");
 
-dotnev.config();
+// Database Connection
+connectDB();
 
+// Routes
+app.get("/", (req, res) => {
+  res.send("Hello");
+});
 
+app.use("/api/auth", authRouter);
 
-app.use('/', (req , res ) => {
-  res.send("hello")
-})
-
+// Server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
