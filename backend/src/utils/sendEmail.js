@@ -1,1 +1,28 @@
-const nodemiler 
+const nodemailer = require('nodemailer')
+
+
+const sendEmail = async (to , subject , text ) => {
+  try {
+    const transporter =  nodemailer.createTransport({
+      service: 'Gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      }
+    })
+
+    const mailoption = {
+      from: process.env.EMAIL_USER,
+      to,
+      subject,
+      Text
+    };
+    await transporter.sendMail(mailoption);
+
+  } catch (error) {
+    console.log(`email send error ${error}`)
+  }
+}
+
+
+module.exports = sendEmail
