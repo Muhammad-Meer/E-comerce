@@ -45,8 +45,7 @@ const AuthController = async (req, res) => {
     // 7. Email Message
     const message = `Welcome to MY Store, ${name}. Your OTP is ${otp}. It is valid for 10 minutes.`;
 
-    // TODO:
-    // await sendEmail(email, "Verify Your Account", message);
+    await sendEmail(email, "Verify Your Account", message);
 
     // 8. Generate JWT
     const token = jwt.sign(
