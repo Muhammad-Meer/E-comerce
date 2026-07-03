@@ -7,7 +7,7 @@ const {AuthController,LoginController,LogoutController, getUser} = require('../c
 
 router.post('/register', AuthController )
 router.post('/login', LoginController )
-router.post('/logout', LogoutController )
+router.get('/logout', LogoutController )
 router.get('/getuser', protected, admin ,  getUser )
 
 module.exports = router
