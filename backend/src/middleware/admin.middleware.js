@@ -4,6 +4,8 @@ const admin =  async (req , res, next ) => {
   
   
   } else {
-    res.status(403)
+    res.status(403).json({message: "access denaid admin only "})
   }
 }
+
+module.exports = admin

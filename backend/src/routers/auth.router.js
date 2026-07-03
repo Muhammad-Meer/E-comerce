@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const  protected = require('../middleware/auth.middleware')
+const  admin = require('../middleware/admin.middleware')
 const {AuthController,LoginController,LogoutController, getUser} = require('../controller/authcontroller')
 
 
