@@ -8,3 +8,5 @@ cloudnary.config({
   api_key: process.env.CLOUDNARY_API_KEY,
   api_secret: process.env.CLOUDNARY_API_SECRET,
 })
+
+module.exports =  cloudnary
