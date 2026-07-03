@@ -15,7 +15,7 @@ const sendEmail = async (to , subject , text ) => {
       from: process.env.EMAIL_USER,
       to,
       subject,
-      Text
+      text
     };
     await transporter.sendMail(mailoption);
 
