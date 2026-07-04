@@ -6,11 +6,6 @@ const connectDB = require("./src/config/db");
 // Database Connection
 connectDB();
 
-// Routes
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
-
 
 // Server
 const PORT = process.env.PORT || 5000;
