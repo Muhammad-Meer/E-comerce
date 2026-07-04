@@ -1,4 +1,14 @@
+const produntmodel = require('../models/produnt.model')
+const cloudnary = require('../config/cloudnary')
+
 const getproducts = async (req, res) => {
+  try {
+    
+  } catch (error) {
+    const products = await produntmodel.find({});
+    res.json(products)
+    
+  }
 };
 
 const createproduct = async (req, res) => {
