@@ -5,6 +5,8 @@ const {getproducts ,createproduct , getproductsByid , updateprodeuct , deletepro
 
 
 const router = express.Router()
+
+
 router.route('/').get(getproducts).post(protected , admin , createproduct)
 
 router.route('/:id').get(getproductsByid).put(protected , admin , updateprodeuct).delete(protected, admin , deleteproduct)
