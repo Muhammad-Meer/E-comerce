@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['user','admin'],
     required: true,
-    default: "user"
+    default: "admin"
   },
   verifyed: {
     type: Boolean,

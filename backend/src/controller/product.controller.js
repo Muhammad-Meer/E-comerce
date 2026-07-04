@@ -44,6 +44,7 @@ const createproduct = async (req, res) => {
 const getproductsByid = async (req, res) => {
   try {
     const product = await produntmodel.findById(req.params.id)
+    console.log(req.params.id)
 
     if (product) {
       res.json(product)
