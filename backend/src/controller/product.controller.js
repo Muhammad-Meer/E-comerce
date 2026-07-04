@@ -13,7 +13,9 @@ const getproducts = async (req, res) => {
 
 const createproduct = async (req, res) => {
   try {
-    const { name, descriptioin, price, categary, stock } = req.body;
+    const { name, price, stock } = req.body;
+    const description = req.body.description || req.body.descriptioin;
+    const category = req.body.category || req.body.categary;
     let imageurl = '';
 
     if (req.file) {
@@ -23,14 +25,12 @@ const createproduct = async (req, res) => {
 
     const newProduct = new produntmodel({
       name,
-      descriptioin,
+      description,
       price,
-      categary,
+      category,
       stock,
-      image: imageurl
+      imageUrl: imageurl
     });
-
-    console.log(result.secure_url)
 
     await newProduct.save();
     res.status(201).json({ message: "Product created successfully", product: newProduct });
