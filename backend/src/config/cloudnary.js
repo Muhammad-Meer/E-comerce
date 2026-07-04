@@ -1,5 +1,5 @@
 const cloudnary = require('cloudinary').v2
-require('domain').config()
+require('dotenv').config()
 
 
 
