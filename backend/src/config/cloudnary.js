@@ -1,12 +1,13 @@
-const cloudnary = require('cloudinary').v2
-require('dotenv').config()
+const cloudinary = require('cloudinary').v2;
+require('dotenv').config();
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDNARY_CLOUD_NAME,
+    api_key: process.env.CLOUDNARY_API_KEY,
+    api_secret: process.env.CLOUDNARY_API_SECRET,
+});
 
-
-cloudnary.config({
-  cloud_name: process.env.CLOUDNARY_CLOUD_NAME,
-  api_key: process.env.CLOUDNARY_API_KEY,
-  api_secret: process.env.CLOUDNARY_API_SECRET,
-})
-
-module.exports =  cloudnary
+module.exports = {
+    cloudinary,           // pura cloudinary object
+    uploader: cloudinary.uploader   // sirf uploader chahiye to yeh bhi export kar sakte ho
+};

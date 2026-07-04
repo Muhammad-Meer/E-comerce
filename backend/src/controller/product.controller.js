@@ -30,9 +30,7 @@ const createproduct = async (req, res) => {
       image: imageurl
     });
 
-
-    const savedprodect = await produntmodel.sve();
-    res.status(201).json(savedprodect )
+    console.log(result.secure_url)
 
     await newProduct.save();
     res.status(201).json({ message: "Product created successfully", product: newProduct });
@@ -58,45 +56,44 @@ const getproductsByid = async (req, res) => {
   }
 };
 
-const updateprodeuct = async (req, res) => {
-  try {
-    const { name, descriptioin, price, categary, stock } = req.body;
-    let imageurl = '';
+const updateProduct = async (req, res) => {
+    try {
+        const { name, description, price, category, stock } = req.body;
 
-    if (req.file) {
-      const result = await cloudnary.uploader.upload(req.file.path);
-      imageurl = result.secure_url;
+        // Pehle product ko find karo
+        const product = await Product.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        // Fields update karo (agar naya value aaya ho tabhi update ho)
+        if (name) product.name = name;
+        if (description) product.description = description;
+        if (price) product.price = price;
+        if (category) product.category = category;
+        if (stock) product.stock = stock;
+
+        // Agar nai image aayi hai to upload karo
+        if (req.file) {
+            const result = await cloudinary.uploader.upload(req.file.path);
+            product.image = result.secure_url;   
+        }
+
+        // Database mein save karo
+        await product.save();
+
+        res.json({
+            message: "Product updated successfully",
+            product: product
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
-
-    const updateData = {
-      name,
-      descriptioin,
-      price,
-      categary,
-      stock
-    };
-
-    if (imageurl) {
-      updateData.image = imageurl;
-    }
-
-    const updatedProduct = await produntmodel.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { new: true }
-    );
-
-    if (updatedProduct) {
-      res.json({ message: "Product updated successfully", product: updatedProduct });
-    } else {
-      res.status(404).json({ message: "product not found" });
-    }
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "server error" });
-  }
 };
+
 
 const deleteproduct = async (req, res) => {
   try {
@@ -117,6 +114,6 @@ module.exports = {
   getproducts,
   createproduct,
   getproductsByid,
-  updateprodeuct,
+  updateProduct,
   deleteproduct
 };
