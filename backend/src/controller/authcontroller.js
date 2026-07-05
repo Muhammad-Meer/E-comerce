@@ -136,7 +136,7 @@ const LoginController = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Login Successful",
-      token: token,   
+      token: token,
       role: user.role
     });
   } catch (error) {
@@ -181,9 +181,14 @@ const getUser = async (req, res) => {
   }
 }
 
+const verifyotp = async () =>  {
+
+}
+
 module.exports = {
   AuthController,
   LoginController,
   LogoutController,
   getUser,
+  verifyotp
 };
