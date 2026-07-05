@@ -62,7 +62,7 @@ const updateProduct = async (req, res) => {
         const { name, description, price, category, stock } = req.body;
 
         // Pehle product ko find karo
-        const product = await Product.findById(req.params.id);
+        const product = await produntmodel.findById(req.params.id);
 
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
