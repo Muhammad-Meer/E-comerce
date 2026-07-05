@@ -17,7 +17,7 @@ const updateOrderStatus =  async() => {
 
 }
 
- 
+ module.exports = {createOrder, getOrders , getOrderById , updateOrderStatus}
 
  
 
