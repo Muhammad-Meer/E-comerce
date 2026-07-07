@@ -48,7 +48,7 @@ const myOrders = async (req, res) => {
 };
 const getOrders = async (req, res) => {
     try {
-        const orders = await Order.find({}).populate('userId', 'id name');
+        const orders = await Order.find({}).populate('user', 'id name');
         res.json(orders);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching orders', error });
@@ -62,7 +62,7 @@ const updateOrderStatus = async (req, res) => {
         if (order) {
             order.status = status;
             await order.save();
-            res.json({ message: 'Order status updated', order });
+            res.json({ message: 'Order status updated', order }); 
         } else {
             res.status(404).json({ message: 'Order not found' });
         }
