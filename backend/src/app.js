@@ -12,7 +12,7 @@ app.use(express.json());
 app.use('/api/auth', authRouter);           // ← sirf ek baar
 app.use('/api/products', require('./routers/productRoutes'));
 app.use('/api/orders', require('./routers/orderRoutes'));
-// app.use('/api/payment', require('./routers/paymentRoutes'));
+app.use('/api/payment', require('./routers/paymentRoutes'));
 // app.use('/api/analytics', require('./routers/analyticsRoutes'));
 
 module.exports = app;
