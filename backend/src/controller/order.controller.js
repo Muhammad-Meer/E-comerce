@@ -1,158 +1,80 @@
-const Order = require("../models/orderModel");
-const sendEmail = require("../utils/sendEmail");
+const Order = require('../models/order.model');
+const sendEmail = require('../utils/sendEmail');
 
-// ================= Create Order =================
+// Create a new order
 const createOrder = async (req, res) => {
-  try {
-    const { item, totalAmount, address, paymentId } = req.body;
+    try {
+        const { items, totalAmount, address, paymentId } = req.body;
 
-    if (!item || item.length === 0 || !totalAmount || !address) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid order data",
-      });
+        if (!items || items.length === 0 || !totalAmount || !address) {
+            return res.status(400).json({ message: 'Invalid order data' });
+        } else {
+            const order = new Order({
+                user: req.user._id,
+                items,
+                totalAmount,
+                address,
+                paymentId
+            });
+
+            await order.save();
+
+            await sendEmail(
+                req.user.email,
+                'Order Created',
+                'Your order has been created successfully.'
+            );
+
+            res.status(201).json({
+                message: 'Order created successfully',
+                order
+            });
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: 'Error creating order',
+            error
+        });
     }
-
-    const order = await Order.create({
-      user: req.user._id,
-      item,
-      totalAmount,
-      address,
-      paymentId,
-    });
-
-    const message = `
-Dear ${req.user.name},
-
-Your order has been created successfully.
-
-Order ID: ${order._id}
-Total Amount: $${totalAmount}
-Address: ${address}
-
-Thank you for shopping with us.
-`;
-
-    await sendEmail(
-      req.user.email,
-      "Order Created Successfully",
-      message
-    );
-
-    res.status(201).json({
-      success: true,
-      message: "Order created successfully",
-      order,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
 };
 
-// ================= Get All Orders (Admin) =================
+const myOrders = async (req, res) => {
+    try {
+        const orders = await Order.find({ user: req.user._id }).populate('items.productId', 'name price');
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching orders', error });
+    }
+};
 const getOrders = async (req, res) => {
-  try {
-    const orders = await Order.find().populate("user", "name email");
-
-    res.status(200).json({
-      success: true,
-      orders,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ================= Get Logged-in User Orders =================
-const getMyOrders = async (req, res) => {
-  try {
-    const orders = await Order.find({
-      user: req.user._id,
-    });
-
-    res.status(200).json({
-      success: true,
-      orders,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
-
-// ================= Get Order By ID =================
-const getOrderById = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id)
-      .populate("user", "name email");
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
+    try {
+        const orders = await Order.find({}).populate('userId', 'id name');
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching orders', error });
     }
-
-    res.status(200).json({
-      success: true,
-      order,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
 };
 
-// ================= Update Order Status =================
 const updateOrderStatus = async (req, res) => {
-  try {
-    const { status } = req.body;
-
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
+    try {
+        const { status } = req.body;
+        const order = await Order.findById(req.params.id);
+        if (order) {
+            order.status = status;
+            await order.save();
+            res.json({ message: 'Order status updated', order });
+        } else {
+            res.status(404).json({ message: 'Order not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating order status', error });
     }
-
-    order.status = status || order.status;
-
-    await order.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Order status updated",
-      order,
-    });
-
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
 };
+
 
 module.exports = {
-  createOrder,
-  getOrders,
-  getMyOrders,
-  getOrderById,
-  updateOrderStatus,
-};
+    createOrder,
+    myOrders,
+    getOrders,
+    updateOrderStatus
+}
