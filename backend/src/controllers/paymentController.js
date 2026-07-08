@@ -1,21 +1,11 @@
-const crypto = require("crypto");
-const Razorpay = require("razorpay");
-const dotenv = require("dotenv").config();
-
 const createdOrder = async (req, res) => {
     try {
-        const instance = new Razorpay({
-            key_id: process.env.RAZORPAY_KEY_ID,
-            key_secret: process.env.RAZORPAY_KEY_SECRET,
-        });
-
-        const options = {
-            amount: req.body.amount * 100, // amount in the smallest currency unit (paise)
-            currency: "INR",
-            receipt: crypto.randomBytes(10).toString("hex"),
+        // Your order creation logic goes here (e.g., saving to a database)
+        const order = {
+            message: "Order created successfully",
+            data: req.body
         };
-
-        const order = await instance.orders.create(options);
+        
         res.status(200).json(order);
     } catch (error) {
         res.status(500).json({ message: "Server error", error: error.message });
